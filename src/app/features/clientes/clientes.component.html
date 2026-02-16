@@ -1,0 +1,29 @@
+<div class="container">
+    <h3 class="text text-center">Administración de Clientes</h3>
+    <app-nuevo></app-nuevo>
+    <table class="table caption-top table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th scope="col">CEDULA</th>
+                <th scope="col">NOMBRE</th>
+                <th scope="col">TELEFONO</th>
+                <th scope="col">EDAD</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cli of clientes">
+                <td><button (click)="(null)" class="btn btn-primary pt-1 pb-1 m-1">Asignar Seguro</button></td>
+                <td>{{cli.cedula}}</td>
+                <td>{{cli.nombre}}</td>
+                <td>{{cli.telefono}}</td>
+                <td>{{cli.edad}}</td>
+                <td>
+                    <button (click)="(null)" class="btn btn-warning pt-1 pb-1 m-1">Editar</button>
+                    <button (click)="(null)" class="btn btn-info pt-1 pb-1 m-1">Detalles</button>
+                    <button (click)="(null)" class="btn btn-danger pt-1 pb-1 m-1">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
