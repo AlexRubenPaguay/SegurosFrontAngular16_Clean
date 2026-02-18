@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '../../models/cliente';
 import { ClienteService } from '../../services/cliente.service';
 
@@ -15,39 +15,45 @@ export class NuevoComponent implements OnInit {
   constructor(private serviceCliente: ClienteService) {
 
   }
-  clienteForm!: FormGroup;
-  submitted = false;
   titulo = 'Nuevo Cliente';
-
+  modal: boolean = false;
+  listaClientes=this.serviceCliente.listaClientes$;
 
   cliente = new FormGroup({
-    id: new FormControl(0),
-    cedula: new FormControl('', [Validators.required, Validators.min(10), Validators.max(10)]),
+    idCliente: new FormControl(0),
+    cedula: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
     nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-    telefono: new FormControl('', [Validators.required, Validators.min(10), Validators.max(10)]),
+    telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.minLength(10)]),
     edad: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(160)])
   });
 
-  submitForm() {
+  openModal() {
+    this.modal = true;
+  }
+  closeModal() {
+    this.modal = false;
+  }
+
+  SubmitForm() {
     if (this.cliente.invalid) {
-      this.cliente.markAllAsTouched;
+      this.cliente.markAllAsTouched();
       return;
     }
     const _cliente: Cliente = {
-      //idCliente: this.cliente.value.id || 0,
+      idCliente:0,
       cedula: this.cliente.value.cedula || '',
       nombre: this.cliente.value.nombre || '',
       telefono: this.cliente.value.telefono || '',
       edad: this.cliente.value.edad || 0
     };
     this.AgregarCliente(_cliente);
-
-
+    this.closeModal();
   }
+
   AgregarCliente(cliente: Cliente) {
-    this.serviceCliente.AgregarCliente(cliente).subscribe(
-    );
+    this.serviceCliente.AgregarCliente(cliente);
   }
+
   reset() {
     this.cliente.reset();
   }

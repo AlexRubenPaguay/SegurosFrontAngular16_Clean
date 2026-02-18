@@ -1,0 +1,102 @@
+<!-- //////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="container">
+    <!-- button to open modal -->
+    <button class="btn btn-outline-warning text-black" (click)="open(contenido)">
+        <i class="bi bi-eye"></i>Actualizar</button>
+
+    <!-- Modal content -->
+    <ng-template #contenido let-modal>
+        <div>
+            <div class="modal-header bg-light">
+                <h4 class="modal-title">Actualizar Cliente</h4>
+                <button type="button" class="btn btn-close" (click)="modal.dismiss('Cross click')">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="cliente" (ngSubmit)="SubmitForm()">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 form-floating ">
+                            <input type="text" class="form-control bg-secondary text-white" id="cedula"
+                                formControlName="cedula" readonly>
+                            <label for="cedula" class="form-label ps-4 text-white">
+                                <i class="bi bi-credit-card"></i> Cédula
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3 form-floating">
+                            <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                                placeholder="Ingrese nombre completo">
+                            <label for="nombre" class="form-label ps-4">
+                                <i class="bi bi-person"></i> Nombre Completo <span class="text-danger">*</span>
+                            </label>
+                            <div *ngIf="cliente.get('nombre')?.invalid && cliente.get('nombre')?.touched"
+                                class="text-danger">
+                                <div *ngIf="cliente.get('nombre')?.errors?.['required']">
+                                    El nombre es requerido.
+                                </div>
+                                <div *ngIf="cliente.get('nombre')?.errors?.['minlength']">
+                                    Mínimo 3 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Teléfono -->
+                        <div class="col-md-6 mb-3 form-floating">
+                            <input type="text" class="form-control" id="telefono" formControlName="telefono"
+                                placeholder="Ingrese teléfono">
+                            <label for="telefono" class="form-label ps-4">
+                                <i class="bi bi-telephone"></i> Teléfono <span class="text-danger">*</span>
+                            </label>
+                            <div *ngIf="cliente.get('telefono')?.invalid && cliente.get('telefono')?.touched"
+                                class="text-danger">
+                                <div *ngIf="cliente.get('telefono')?.errors?.['required']">
+                                    El teléfono es requerido.
+                                </div>
+                                <div *ngIf="cliente.get('telefono')?.errors?.['minlength']">
+                                    Mínimo 10 digitos.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 form-floating">
+                            <input type="number" class="form-control" id="edad" formControlName="edad"
+                                placeholder="Ingrese la edad">
+                            <label for="edad" class="form-label ps-4">
+                                <i class="bi bi-calendar"></i> Edad <span class="text-danger">*</span>
+                            </label>
+                            <div *ngIf="cliente.get('edad')?.invalid && cliente.get('edad')?.touched"
+                                class="text-danger">
+                                <div *ngIf="cliente.get('edad')?.errors?.['required']">
+                                    La edad es requerido.
+                                </div>
+                                <div *ngIf="cliente.get('edad')?.errors?.['min']">
+                                    Edad mínima 1 año.
+                                </div>
+                                <div *ngIf="cliente.get('edad')?.errors?.['max']">
+                                    Edad máxima 160 años.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle"></i> Los campos marcados con <span class="text-danger">*</span> son
+                        obligatorios
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center bg-light">
+                        <button type="reset" class="btn btn-outline-secondary ps-2"
+                            (click)="modal.dismiss('Close click')">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-outline-primary ps-2">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-template>
+</div>

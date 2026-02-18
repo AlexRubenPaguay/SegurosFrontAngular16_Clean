@@ -1,0 +1,38 @@
+<div class="container">
+    <!-- button to open modal -->
+    <button class="btn btn-outline-info" (click)="open(contenido)">
+        <i class="bi bi-pencil"></i>Detalles</button>
+
+    <!-- Modal content -->
+    <ng-template #contenido let-modal>
+        <div>
+            <div class="modal-header">
+                <h4 class="modal-title">Detalles del Cliente</h4>
+                <button type="button" class="btn btn-close" (click)="modal.dismiss('Cross click')">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <p class="fw-bolder col-3 text-left">CÉDULA:</p>
+                    <p class="form-label col-9 text-left">{{ cliente?.cedula }}</p>
+                </div>
+                <div class="row">
+                    <p class="fw-bolder col-3 text-left">NOMBRE:</p>
+                    <p class="form-label col-9 text-left">{{ cliente?.nombre }}</p>
+                </div>
+                <div class="row">
+                    <p class="fw-bolder col-3 text-left">TELÉFONO:</p>
+                    <p class="form-label col-9 text-left">{{ cliente?.telefono }}</p>
+                </div>
+
+                <div class="row">
+                    <p class="fw-bolder col-3 text-left">EDAD:</p>
+                    <p class="form-label col-9 text-left">{{ cliente?.edad }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close click')">Close</button>
+            </div>
+        </div>
+    </ng-template>
+</div>

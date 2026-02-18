@@ -1,5 +1,5 @@
 export interface Cliente {
-   // idCliente:number,
+    idCliente:number,
     cedula:string,
     nombre:string,
     telefono:string,

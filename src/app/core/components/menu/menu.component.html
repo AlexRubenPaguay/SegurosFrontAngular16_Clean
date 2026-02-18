@@ -33,6 +33,18 @@
                     </a>
                 </li>
             </ul>
+            <ul class="navbar-nav me-auto">
+                <li class="">
+                    <p class="text-white"> Total Clientes
+                        ({{(totalClientes| async)?.length}})
+                    </p>
+                </li>
+                <li class="ps-3">
+                    <p class="text-white"> Total Asegurados
+                        ({{(totalAsegurados | async)?.length}})
+                    </p>
+                </li>
+            </ul>
 
             <!-- Menú de usuario a la derecha -->
             <ul class="navbar-nav">
