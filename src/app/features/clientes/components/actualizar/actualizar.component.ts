@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClienteService } from '../../services/cliente.service';
@@ -10,7 +10,7 @@ import { Cliente } from '../../models/cliente';
   templateUrl: './actualizar.component.html',
   styleUrls: ['./actualizar.component.sass']
 })
-export class ActualizarComponent implements OnInit {
+export class ActualizarComponent implements OnInit, OnDestroy {
 
   constructor(private modalService: NgbModal, private servicioCliente: ClienteService) {
   }
@@ -21,7 +21,7 @@ export class ActualizarComponent implements OnInit {
 
   private destruir$ = new Subject<void>();
 
-  titulo: string = 'Detalles de Cliente';
+  titulo: string = 'Actualizar Cliente';
   //modal: boolean = false;
   /*_cliente: Cliente | null = {
     idCliente: 0,

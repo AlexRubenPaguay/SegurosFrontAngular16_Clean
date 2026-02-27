@@ -12,6 +12,6 @@ export class MenuComponent {
 
   }
   totalClientes = this.serviceCliente.listaClientes$;
-  totalAsegurados = this.serviceSeguro.listaSeguros$;
+  totalAsegurados = this.serviceSeguro.segurosResponse$;
 
 }

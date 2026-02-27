@@ -1,95 +1,126 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Seguro } from '../models/seguro';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ClienteService } from '../../clientes/services/cliente.service';
+import { Cliente } from '../../clientes/models/cliente';
+import { SeguroClienteResponse } from '../models/seguro-cliente-response';
+import { SegurosComponent } from '../seguros.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SeguroService implements OnInit {
 
-  constructor(private _client: HttpClient) { 
-     this.GetAllSeguros();
+  constructor(private _client: HttpClient, private serviceClinte: ClienteService) {
+    this.GetAllSeguros();
   }
+
   ngOnInit(): void {
   }
 
   url: string = 'http://localhost:5261/api/v1/Seguro/';
 
   //PARA VER CAMBIOS EN LISTA DE SEGUROS
-  private listaSegurosSubject = new BehaviorSubject<Seguro[]>([]);
-  listaSeguros$ = this.listaSegurosSubject.asObservable();
+  //private listaSegurosSubject = new BehaviorSubject<Seguro[]>([]);
+  //listaSeguros$ = this.listaSegurosSubject.asObservable();
 
-  //PARA VER LOS DETALLES DE UN CLIENTE
-  //private detallesClienteSubject = new BehaviorSubject<Cliente | null>(null);
-  //detallesCliente$ = this.detallesClienteSubject.asObservable();
 
-  /*EnviarDatosCliente(cliente: Cliente) {
-    this.detallesClienteSubject.next(cliente);
-  }*/
+  //PARA VER CAMBIOS EN LISTA DE SEGUROS
+  private segurosResponseSubject = new BehaviorSubject<SeguroClienteResponse[]>([]);
+  segurosResponse$ = this.segurosResponseSubject.asObservable();
+
+  //PARA VER LOS DETALLES DE UN SEGURO
+  private detallesSeguroSubject = new BehaviorSubject<SeguroClienteResponse | null>(null);
+  detallesSeguro$ = this.detallesSeguroSubject.asObservable();
+
+  EnviarDatosSeguro(seguroclienteRequest: SeguroClienteResponse) {
+    this.detallesSeguroSubject.next(seguroclienteRequest);
+  }
+
+  seguroclienteResponse: SeguroClienteResponse[] = [];
 
   GetAllSeguros() {
     this._client.get<Seguro[]>(this.url).subscribe({
-      next: (Seguros) => {
-        this.listaSegurosSubject.next(Seguros);
+      next: (seguros) => {
+        //this.listaSegurosSubject.next(seguros);
+        if (seguros !== null) {
+          seguros.forEach(_seguro => {  ////RRECORRE TODO EL LISTADO DE SEGUROS
+            this.serviceClinte.GetClienteById(_seguro.idCliente).subscribe({  // POR CADA SEGURO VA Y BUSCA POR IDCLIENTE, LOS DATOS DEL CLIENTE ASOCIADO AL SEGURO
+              next: (_cliente) => {
+                let segurocliente = {    // FORMA EL OBJETO CON LOS DATOS DE SEGURO Y CLIENTE
+                  seguro: _seguro,
+                  cliente: _cliente
+                };
+                this.seguroclienteResponse.push(segurocliente);  // AÑADE EL OBJETO ANTERIOR AL LISTADO
+              },
+              error: (err) => {
+                console.error('Error al obtener los datos del cliente x cada seguro (GetAllSeguros)');
+              },
+            });
+          });
+          this.segurosResponseSubject.next(this.seguroclienteResponse);
+        } else {
+          console.log('No hay seguros servico (GetAllSeguros)' + seguros);
+        }
       },
       error: (error) => {
         console.error('Error en el servicio (GetAllSeguros):' + error);
       }
     });
   }
-/*
-  GetClienteByCedula(cedula: string): Observable<Cliente> {
-    return this._client.get<Cliente>(this.url + 'GetByCedula/' + `${cedula}`);
-  }
-  GetClienteById(idCliente: number): Observable<Cliente> {
-    return this._client.get<Cliente>(this.url + `${idCliente}`);
+
+  GetSeguroByCodigo(codigo: string): Observable<Seguro> {
+    return this._client.get<Seguro>(this.url + `${codigo}`);
   }
 
-  AgregarCliente(cliente: Cliente) {
+  GetSeguroById(idSeguro: number): Observable<Seguro> {
+    return this._client.get<Seguro>(this.url + `${idSeguro}`);
+  }
+
+  AgregarSeguro(seguro: Seguro) {
     try {
-      this._client.post(this.url, cliente).subscribe({
+      this._client.post(this.url, seguro).subscribe({
         next: () => {
-          this.GetAllClientes();
+          this.GetAllSeguros();
         },
         error: (error) => {
-          console.error('Error al conectar con la API(AgregarCliente): ' + error);
+          console.error('Error al conectar con la API(AgregarSeguro): ' + error);
         }
       });
     } catch (error) {
-      console.error('Error desconocido en (AgregarCliente) :' + error)
+      console.error('Error desconocido en (AgregarSeguro) :' + error)
     }
   }
 
-  ActualizarCliente(idCliente: number, cliente: Cliente) {
+  ActualizarSeguro(idSeguro: number, seguro: Seguro) {
     try {
-      this._client.put(this.url + `${idCliente}`, cliente).subscribe({
+      this._client.put(this.url + `${idSeguro}`, seguro).subscribe({
         next: (value) => {
-          this.GetAllClientes();
+          this.GetAllSeguros();
         },
         error: (error) => {
-          console.error('Error al conectar con la API(ActualizarCliente): ' + error);
+          console.error('Error al conectar con la API(ActualizarSeguro): ' + error);
         },
       });
     } catch (error) {
-      console.error('Error desconocido en (ActualizarCliente) :' + error)
+      console.error('Error desconocido en (ActualizarSeguro) :' + error)
     }
-
   }
 
-  EliminarCliente(cedula: string) {
+  EliminarSeguro(idSeguro: number) {
     try {
-      this._client.delete(this.url + `${cedula}`).subscribe({
+      this._client.delete(this.url + `${idSeguro}`).subscribe({
         next: () => {
-          this.GetAllClientes();
+          this.GetAllSeguros();
         },
         error: (error) => {
-          this.GetAllClientes();
-          console.error('Error al conectar con la API (EliminarCliente): ' + error.error);
+          this.GetAllSeguros();
+          console.error('Error al conectar con la API (EliminarSeguro): ' + error.error);
         }
       });
     } catch (error) {
-      console.error('Error desconocido en (EliminarCliente) :' + error)
+      console.error('Error desconocido en (EliminarSeguro) :' + error)
     }
-  }*/
+  }
 }

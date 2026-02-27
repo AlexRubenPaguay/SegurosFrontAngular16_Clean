@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SeguroService } from './services/seguro.service';
 import { Seguro } from './models/seguro';
+import { SeguroClienteResponse } from './models/seguro-cliente-response';
 
 @Component({
   selector: 'app-seguros',
@@ -9,39 +10,63 @@ import { Seguro } from './models/seguro';
 })
 export class SegurosComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
   }
   constructor(private serviceSeguro: SeguroService) {
     this.GetAllSeguros();
   }
   datoBuscar: any;
-  seguros: Seguro[] = [];
-  segurosBuscados: Seguro[] = [];
-  /*seguroSeleccionado: Seguro = {
-    idCliente: 0,
-    cedula: '',
-    nombre: '',
-    telefono: '',
-    edad: 0
-  };*/
+
+  seguroSeleccionado: SeguroClienteResponse = {
+    seguro: {
+      idSeguro: 0,
+      codigo: '',
+      nombre: '',
+      suma: 0,
+      prima: 0,
+      idCliente: 0
+    },
+    cliente: {
+      idCliente: 0,
+      cedula: '',
+      nombre: '',
+      telefono: '',
+      edad: 0
+    }
+  };
+
+  seguroclienteResponse: SeguroClienteResponse[] = [];
+  seguroclienteResponseBuscado: SeguroClienteResponse[] = [];
 
   GetAllSeguros() {
-    this.serviceSeguro.listaSeguros$.subscribe({
+    this.serviceSeguro.segurosResponse$.subscribe({
       next: (segurosSubject) => {
-        this.seguros = segurosSubject;
-        this.segurosBuscados = segurosSubject;
+        this.seguroclienteResponse = segurosSubject;
+        this.seguroclienteResponseBuscado = segurosSubject;
       },
       error: (error) => {
         console.error('Error en el componente (SegurosComponent) :' + error);
       },
     });
   }
+  /*
+    GetAllSeguros() {
+      this.serviceSeguro.listaSeguros$.subscribe({
+        next: (segurosSubject) => {
+          this.seguros = segurosSubject;
+          this.segurosBuscados = segurosSubject;
+        },
+        error: (error) => {
+          console.error('Error en el componente (SegurosComponent) :' + error);
+        },
+      });
+    }*/
 
   GetBuscar(): void {
-    if (this.datoBuscar !== "" && this.seguros.length > 0) {
-      this.seguros = this.segurosBuscados.filter(x => x.codigo.toLowerCase().startsWith(this.datoBuscar.toLowerCase()));
+    if (this.datoBuscar !== "" && this.seguroclienteResponse.length > 0) {
+      this.seguroclienteResponse = this.seguroclienteResponseBuscado.filter(x => x.seguro.codigo.toLowerCase().startsWith(this.datoBuscar.toLowerCase()) || x.cliente.cedula.startsWith(this.datoBuscar));
     } else {
-      this.seguros = [...this.segurosBuscados];
+      this.seguroclienteResponse = [...this.seguroclienteResponseBuscado];
       // this.GetAllClientes();
     }
   }
@@ -69,11 +94,12 @@ export class SegurosComponent implements OnInit {
       this.EliminarCliente(cedula);
     }
   }
-
-  ObtenerCliente(cliente: Cliente) {
-    this.clieteSeleccionado = cliente;
-    this._serviceCliente.EnviarDatosCliente(cliente);
-    console.log('EL ID ES -->' + cliente.idCliente)
-    console.log('he seleccionado: ' + this.clieteSeleccionado.cedula + "  " + this.clieteSeleccionado.nombre);
-  }*/
+*/
+  ObtenerCliente(seguroclienteResquest: SeguroClienteResponse) {
+    this.seguroSeleccionado = seguroclienteResquest;
+    this.serviceSeguro.EnviarDatosSeguro(this.seguroSeleccionado);
+    console.log('EL ID seguro ES -->' + this.seguroSeleccionado.seguro.idSeguro)
+    console.log('EL ID ckiente ES -->' + this.seguroSeleccionado.seguro.idCliente)
+    // console.log('he seleccionado: ' + this.clieteSeleccionado.cedula + "  " + this.clieteSeleccionado.nombre);
+  }
 }

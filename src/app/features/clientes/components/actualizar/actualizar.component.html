@@ -1,4 +1,3 @@
-<!-- //////////////////////////////////////////////////////////////////////////////////////////-->
 <div class="container">
     <!-- button to open modal -->
     <button class="btn btn-outline-warning text-black" (click)="open(contenido)">
@@ -7,8 +6,8 @@
     <!-- Modal content -->
     <ng-template #contenido let-modal>
         <div>
-            <div class="modal-header bg-light">
-                <h4 class="modal-title">Actualizar Cliente</h4>
+            <div class="modal-header bg-warning">
+                <h4 class="modal-title">{{titulo}}</h4>
                 <button type="button" class="btn btn-close" (click)="modal.dismiss('Cross click')">
                 </button>
             </div>

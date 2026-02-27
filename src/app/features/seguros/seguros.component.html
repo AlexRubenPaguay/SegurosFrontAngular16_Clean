@@ -2,32 +2,35 @@
     <h3 class="text text-center">Asegurados</h3>
     <div class="row mb-3 mt-3">
         <div class="col col-10">
-            <input type="text" class="form-control" placeholder="Buscar seguro por: código" [(ngModel)]="datoBuscar"
+            <input type="text" class="form-control"
+                placeholder="Buscar seguro por: código de seguro o cédula de cliente" [(ngModel)]="datoBuscar"
                 (input)="GetBuscar()">
         </div>
     </div>
     <table class="table table-hover resposive">
         <thead>
-            <tr>                
+            <tr>
                 <th scope="col">CÓDIGO</th>
                 <th scope="col">NOMBRE</th>
                 <th scope="col">SUMA ASEGURADA</th>
                 <th scope="col">PRIMA</th>
-                <th scope="col">ID CLIENTE</th>
+                <th scope="col">CÉDULA</th>
+                <th scope="col">NOMBRE</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let seg of seguros">                
-                <td>{{seg.codigo}}</td>
-                <td>{{seg.nombre}}</td>
-                <td>{{seg.suma|currency}}</td>
-                <td>{{seg.prima |currency}}</td>
-                <td>{{seg.idCliente | number}}</td>
+            <tr *ngFor="let seg of seguroclienteResponse">
+                <td>{{seg.seguro.codigo}}</td>
+                <td>{{seg.seguro.nombre}}</td>
+                <td>{{seg.seguro.suma|currency}}</td>
+                <td>{{seg.seguro.prima |currency}}</td>
+                <td>{{seg.cliente.cedula}}</td>
+                <td>{{seg.cliente.nombre}}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-outline-warning pt-1 pb-1 m-1" title="Actualizar">
-                            <i class="bi bi-eye"></i>Actualizar</button>
+                        <app-actualizar (click)="ObtenerCliente(seg)" title="Actualizar">
+                        </app-actualizar>
                         <button class="btn btn-outline-info pt-1 pb-1 m-1" title="Ver Detalles">
                             <i class="bi bi-pencil"></i>Detalles
                         </button>
