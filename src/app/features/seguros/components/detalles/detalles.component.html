@@ -1,1 +1,103 @@
-<p>detalles works!</p>
+<div class="container">
+    <!-- button to open modal -->
+    <button class="btn btn-outline-info" (click)="open(contenido)">
+        <i class="bi bi-pencil"></i>Detalles
+    </button>
+
+    <!-- Modal content -->
+    <ng-template #contenido let-modal>
+        <div>
+            <div class="modal-header bg-info text-white">
+                <h4 class="modal-title">{{titulo}}</h4>
+                <button type="button" class="btn btn-close" (click)="modal.dismiss('Cross click')">
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Datos del Cliente - AFUERA del grupo seguro -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-muted">Datos del Cliente</h5>
+                        <hr />
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 form-floating">
+                                <input type="text" class="form-control" id="nombre" readonly
+                                    value={{seguroClienteResponse?.cliente?.nombre}}>
+                                <label for="nombre">
+                                    <i class="bi bi-person"></i> Nombre Completo
+                                </label>
+                            </div>
+                            <div class="col-md-6 mb-3 form-floating ">
+                                <input type="text" class="form-control" id="cedula" readonly
+                                    value={{seguroClienteResponse?.cliente?.cedula}}>
+                                <label for="cedula">
+                                    Cédula
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 form-floating">
+                                <input type="text" class="form-control" id="telefono" readonly
+                                    value={{seguroClienteResponse?.cliente?.telefono}}>
+                                <label for="telefono">
+                                    Teléfono
+                                </label>
+                            </div>
+                            <div class="col-md-6 mb-3 form-floating ">
+                                <input type="text" class="form-control" id="edad" readonly
+                                    value={{seguroClienteResponse?.cliente?.edad}}>
+                                <label for="edad">
+                                    Edad
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Datos del Seguro -->
+                    <div class="col-md-6">
+                        <h5 class="text-muted">Datos del Seguro</h5>
+                        <hr />
+                        <div class="form-floating">
+                            <input id="codSeguro" class="form-control" placeholder="Código" type="text"
+                                value={{seguroClienteResponse?.seguro?.codigo}} readonly>
+                            <label for="codSeguro">Código del Seguro
+                            </label>
+                        </div>
+                        <div class="form-floating mb-3 mt-3">
+                            <input id="nombreSeguro" class="form-control" type="text"
+                                value={{seguroClienteResponse?.seguro?.nombre}} readonly>
+                            <label for="nombreSeguro">Nombre del Seguro
+                            </label>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input id="sumaSeguro" class="form-control" type="number"
+                                        value={{seguroClienteResponse?.seguro?.suma}} readonly>
+                                    <label for="sumaSeguro">Suma Asegurada
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input id="primaSeguro" class="form-control" type="number"
+                                        value={{seguroClienteResponse?.seguro?.prima}} readonly>
+                                    <label for="primaSeguro">Prima
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end bg-light">
+                        <button type="reset" class="btn btn-outline-secondary"
+                            (click)="modal.dismiss('Close click')">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

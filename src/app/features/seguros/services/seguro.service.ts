@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Seguro } from '../models/seguro';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, Observable } from 'rxjs';
 import { ClienteService } from '../../clientes/services/cliente.service';
 import { Cliente } from '../../clientes/models/cliente';
 import { SeguroClienteResponse } from '../models/seguro-cliente-response';
@@ -44,7 +44,12 @@ export class SeguroService implements OnInit {
     this._client.get<Seguro[]>(this.url).subscribe({
       next: (seguros) => {
         //this.listaSegurosSubject.next(seguros);
-        if (seguros !== null) {
+        if (seguros !== null && seguros.length > 0) {
+          // Crear un contador para saber cuándo terminan todas las peticiones
+          let peticionesCompletadas = 0;
+
+          // Limpiar el array antes de empezar (importante para evitar duplicados)
+          this.seguroclienteResponse = [];
           seguros.forEach(_seguro => {  ////RRECORRE TODO EL LISTADO DE SEGUROS
             this.serviceClinte.GetClienteById(_seguro.idCliente).subscribe({  // POR CADA SEGURO VA Y BUSCA POR IDCLIENTE, LOS DATOS DEL CLIENTE ASOCIADO AL SEGURO
               next: (_cliente) => {
@@ -53,14 +58,22 @@ export class SeguroService implements OnInit {
                   cliente: _cliente
                 };
                 this.seguroclienteResponse.push(segurocliente);  // AÑADE EL OBJETO ANTERIOR AL LISTADO
+                peticionesCompletadas++;
+                if (peticionesCompletadas === seguros.length) {
+                  // SOLO cuando TODAS las peticiones terminen, emitimos el resultado
+                  this.segurosResponseSubject.next(this.seguroclienteResponse);
+                  console.log('Lista actualizada:', this.seguroclienteResponse);
+                }
               },
-              error: (err) => {
-                console.error('Error al obtener los datos del cliente x cada seguro (GetAllSeguros)');
+              error: (error) => {
+                console.error('Error al obtener los datos del cliente x cada seguro (GetAllSeguros)' + error);
               },
             });
           });
-          this.segurosResponseSubject.next(this.seguroclienteResponse);
+
         } else {
+          this.seguroclienteResponse = [];
+          this.segurosResponseSubject.next([]);
           console.log('No hay seguros servico (GetAllSeguros)' + seguros);
         }
       },
@@ -109,18 +122,13 @@ export class SeguroService implements OnInit {
   }
 
   EliminarSeguro(idSeguro: number) {
-    try {
-      this._client.delete(this.url + `${idSeguro}`).subscribe({
-        next: () => {
-          this.GetAllSeguros();
-        },
-        error: (error) => {
-          this.GetAllSeguros();
-          console.error('Error al conectar con la API (EliminarSeguro): ' + error.error);
-        }
-      });
-    } catch (error) {
-      console.error('Error desconocido en (EliminarSeguro) :' + error)
-    }
+    this._client.delete(this.url + `${idSeguro}`).subscribe({
+      next: async () => {
+        await this.GetAllSeguros();
+      },
+      error: (error) => {
+        console.error(`Error al eliminar el seguro [${idSeguro}]` + error.error);
+      },
+    });
   }
 }

@@ -31,10 +31,8 @@
                     <div class="btn-group" role="group">
                         <app-actualizar (click)="ObtenerCliente(seg)" title="Actualizar">
                         </app-actualizar>
-                        <button class="btn btn-outline-info pt-1 pb-1 m-1" title="Ver Detalles">
-                            <i class="bi bi-pencil"></i>Detalles
-                        </button>
-                        <button class="btn btn-outline-danger pt-1 pb-1 m-1" title="Eliminar">
+                        <app-detalles (click)="ObtenerCliente(seg)" title="Ver Detalles"></app-detalles>
+                        <button class="btn btn-outline-danger pt-1 pb-1 m-1" title="Eliminar" (click)="Confirmar(seg)">
                             <i class="bi bi-trash"></i>Eliminar</button>
                     </div>
                 </td>
