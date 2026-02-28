@@ -10,7 +10,7 @@ import { SeguroClienteResponse } from './models/seguro-cliente-response';
 })
 export class SegurosComponent implements OnInit {
   ngOnInit(): void {
-
+    this.GetAllSeguros();
   }
   constructor(private serviceSeguro: SeguroService) {
     this.GetAllSeguros();
@@ -49,18 +49,6 @@ export class SegurosComponent implements OnInit {
       },
     });
   }
-  /*
-    GetAllSeguros() {
-      this.serviceSeguro.listaSeguros$.subscribe({
-        next: (segurosSubject) => {
-          this.seguros = segurosSubject;
-          this.segurosBuscados = segurosSubject;
-        },
-        error: (error) => {
-          console.error('Error en el componente (SegurosComponent) :' + error);
-        },
-      });
-    }*/
 
   GetBuscar(): void {
     if (this.datoBuscar !== "" && this.seguroclienteResponse.length > 0) {
@@ -70,36 +58,20 @@ export class SegurosComponent implements OnInit {
       // this.GetAllClientes();
     }
   }
-  /*
-    GetAllClientes() {
-      this._serviceCliente.GetAllClientes().subscribe({
-        next: (data) => {
-          console.log(data);
-          this.clientes = data;
-          this.clientesBuscados=data;
-        },
-        error: () => {
-          console.error('Error al listar los clientes.');
-        }
-      });
-    }
-  */
-  /*EliminarCliente(cedula: string) {
-    this._serviceCliente.EliminarCliente(cedula);
+  
+  EliminarSeguro(idSeguro: number) {
+    this.serviceSeguro.EliminarSeguro(idSeguro);
   }
 
-  Confirmar(cedula: string) {
-    const varificar = window.confirm(`Está seguro que desea eliminar el cliente con cédula [${cedula}]`);
+  Confirmar(seguroclienteResquest: SeguroClienteResponse) {
+    const varificar = window.confirm(`Está seguro que desea eliminar el seguro con código [${seguroclienteResquest.seguro.codigo}] asociado al cliente [${seguroclienteResquest.cliente.nombre}]`);
     if (varificar) {
-      this.EliminarCliente(cedula);
+      this.EliminarSeguro(seguroclienteResquest.seguro.idSeguro);
     }
   }
-*/
+
   ObtenerCliente(seguroclienteResquest: SeguroClienteResponse) {
     this.seguroSeleccionado = seguroclienteResquest;
     this.serviceSeguro.EnviarDatosSeguro(this.seguroSeleccionado);
-    console.log('EL ID seguro ES -->' + this.seguroSeleccionado.seguro.idSeguro)
-    console.log('EL ID ckiente ES -->' + this.seguroSeleccionado.seguro.idCliente)
-    // console.log('he seleccionado: ' + this.clieteSeleccionado.cedula + "  " + this.clieteSeleccionado.nombre);
   }
 }
