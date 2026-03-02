@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Seguro } from '../models/seguro';
-import { BehaviorSubject, forkJoin, map, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, Observable, tap } from 'rxjs';
 import { ClienteService } from '../../clientes/services/cliente.service';
 import { Cliente } from '../../clientes/models/cliente';
 import { SeguroClienteResponse } from '../models/seguro-cliente-response';
@@ -93,7 +93,7 @@ export class SeguroService implements OnInit {
 
   AgregarSeguro(seguro: Seguro) {
     try {
-      this._client.post(this.url, seguro).subscribe({
+      this._client.post<Seguro>(this.url, seguro).subscribe({
         next: () => {
           this.GetAllSeguros();
         },
@@ -106,19 +106,10 @@ export class SeguroService implements OnInit {
     }
   }
 
-  ActualizarSeguro(idSeguro: number, seguro: Seguro) {
-    try {
-      this._client.put(this.url + `${idSeguro}`, seguro).subscribe({
-        next: (value) => {
-          this.GetAllSeguros();
-        },
-        error: (error) => {
-          console.error('Error al conectar con la API(ActualizarSeguro): ' + error);
-        },
-      });
-    } catch (error) {
-      console.error('Error desconocido en (ActualizarSeguro) :' + error)
-    }
+  ActualizarSeguro(idSeguro: number, seguro: Seguro): Observable<Seguro> {
+    return this._client.put<Seguro>(this.url + `${idSeguro}`, seguro).pipe(
+      tap(() => { this.GetAllSeguros(); })
+    );
   }
 
   EliminarSeguro(idSeguro: number) {

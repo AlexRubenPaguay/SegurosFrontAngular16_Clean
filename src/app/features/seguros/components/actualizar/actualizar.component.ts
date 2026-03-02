@@ -22,46 +22,46 @@ export class ActualizarComponent implements OnInit, OnDestroy {
   private destruir$ = new Subject<void>();
 
   titulo: string = 'Actualizar Seguro';
-/*
-  seguroClienteResponse = new FormGroup({
-    seguro: new FormGroup({
-      idSeguro: new FormControl(0, Validators.required),
-      nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-      codigo: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
-      suma: new FormControl(0.0, [Validators.required, Validators.min(1)]),
-      prima: new FormControl(0.0, [Validators.required, Validators.min(1)]),
-      idCliente: new FormControl(0, Validators.required)
-    }),
-    cliente: new FormGroup({
-      idCliente: new FormControl(0, Validators.required),
-      cedula: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
-      nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-      telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
-      edad: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(160)])
-    })
-  });
-*/
-
-  
-    // VERSIÓN CON FORMBUILDER (más limpia y recomendada)
-    seguroClienteResponse: FormGroup = this.fb.group({
-      seguro: this.fb.group({
-        idSeguro: [0, Validators.required],
-        nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-        codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
-        suma: [0, [Validators.required, Validators.min(1)]],
-        prima: [0, [Validators.required, Validators.min(1)]],
-        idCliente: [0, Validators.required]
+  /*
+    seguroClienteResponse = new FormGroup({
+      seguro: new FormGroup({
+        idSeguro: new FormControl(0, Validators.required),
+        nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+        codigo: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
+        suma: new FormControl(0.0, [Validators.required, Validators.min(1)]),
+        prima: new FormControl(0.0, [Validators.required, Validators.min(1)]),
+        idCliente: new FormControl(0, Validators.required)
       }),
-      cliente: this.fb.group({
-        idCliente: [0, Validators.required],
-        cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
-        nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-        telefono: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
-        edad: [0, [Validators.required, Validators.min(1), Validators.max(160)]]
+      cliente: new FormGroup({
+        idCliente: new FormControl(0, Validators.required),
+        cedula: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
+        nombre: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+        telefono: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+        edad: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(160)])
       })
     });
-  
+  */
+
+
+  // VERSIÓN CON FORMBUILDER (más limpia y recomendada)
+  seguroClienteResponse: FormGroup = this.fb.group({
+    seguro: this.fb.group({
+      idSeguro: [0, Validators.required],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      suma: [0, [Validators.required, Validators.min(1)]],
+      prima: [0, [Validators.required, Validators.min(1)]],
+      idCliente: [0, Validators.required]
+    }),
+    cliente: this.fb.group({
+      idCliente: [0, Validators.required],
+      cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      telefono: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
+      edad: [0, [Validators.required, Validators.min(1), Validators.max(160)]]
+    })
+  });
+
 
   reset() {
     this.seguroClienteResponse.reset();
@@ -73,17 +73,17 @@ export class ActualizarComponent implements OnInit, OnDestroy {
       backdrop: 'static',
       keyboard: false,
       centered: true,
-      // size: 'lg'
+       size: 'lg'
     });
 
   }
 
   SubmitForm() {
-    if (this.seguroClienteResponse.invalid) {
+    if (this.seguroClienteResponse.invalid) {      
       this.seguroClienteResponse.markAllAsTouched();
       return;
     }
-    const seguroData = this.seguroClienteResponse.value.seguro;
+    const seguroData = this.seguroClienteResponse.value.seguro;    
     const _seguro: Seguro = {
       idSeguro: seguroData?.idSeguro || 0,
       nombre: seguroData?.nombre || '',
@@ -92,8 +92,14 @@ export class ActualizarComponent implements OnInit, OnDestroy {
       prima: seguroData?.prima || 0.0,
       idCliente: seguroData?.idCliente || 0
     }
-    this.servicioSeguro.ActualizarSeguro(_seguro.idSeguro, _seguro);
-    this.modalService.dismissAll();
+    this.servicioSeguro.ActualizarSeguro(_seguro.idSeguro, _seguro).subscribe({
+      next: () => {
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        console.error('Error en ActualizarSeguro ' + error.error);
+      },
+    });
   }
 
 

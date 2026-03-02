@@ -1,44 +1,42 @@
 <div class="container">
     <!-- button to open modal -->
-    <button class="btn btn-outline-warning text-black" (click)="open(contenido)">
-        <i class="bi bi-pencil"></i>Actualizar
+    <button class="btn btn-outline-primary" (click)="open(contenido)">
+        <i class="bi bi-shield"></i>Asignar Seguro
     </button>
 
     <!-- Modal content -->
     <ng-template #contenido let-modal>
         <div>
-            <div class="modal-header bg-warning text-white">
+            <div class="modal-header bg-primary text-white">
                 <h4 class="modal-title">{{titulo}}</h4>
                 <button type="button" class="btn btn-close" (click)="modal.dismiss('Cross click')">
                 </button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="seguroClienteResponse" (ngSubmit)="SubmitForm()">
-                    <!-- Datos del Cliente - AFUERA del grupo seguro -->
-
-                    <div formGroupName="cliente">
-                        <h5 class="text-muted">Datos del Cliente</h5>
-                        <hr />
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3 form-floating">
-                                <input type="text" class="form-control bg-secondary text-white" id="nombre"
-                                    formControlName="nombre" readonly>
-                                <label for="nombre" class="form-label ps-4 text-white">
-                                    <i class="bi bi-person"></i> Nombre Completo
-                                </label>
-                            </div>
-                            <div class="col-md-6 mb-3 form-floating ">
-                                <input type="text" class="form-control bg-secondary text-white" id="cedula"
-                                    formControlName="cedula" readonly>
-                                <label for="cedula" class="form-label ps-4 text-white">
-                                    Cédula
-                                </label>
-                            </div>
+                <!-- Datos del Cliente -->
+                <div>
+                    <h5 class="text-muted">Datos del Cliente</h5>
+                    <hr />
+                    <div class="row mb-3">                        
+                        <div class="col-md-6 mb-3 form-floating">
+                            <input type="text" class="form-control bg-secondary text-white" id="nombre"
+                                [value]="cliente.nombre" readonly>
+                            <label for="nombre" class="form-label ps-4 text-white">
+                                <i class="bi bi-person"></i> Nombre Completo
+                            </label>
+                        </div>
+                        <div class="col-md-6 mb-3 form-floating ">
+                            <input type="text" class="form-control bg-secondary text-white" id="cedula" readonly
+                                [value]="cliente.cedula">
+                            <label for="cedula" class="form-label ps-4 text-white">
+                                Cédula
+                            </label>
                         </div>
                     </div>
-
+                </div>
+                <form [formGroup]="seguro" (ngSubmit)="SubmitForm()">
                     <!-- Datos del Seguro -->
-                    <div formGroupName="seguro">
+                    <div >
                         <h5 class="text-muted">Datos del Seguro</h5>
                         <hr />
                         <div class="row mb-3">
@@ -48,15 +46,15 @@
                                         placeholder="Código" type="text">
                                     <label for="codSeguro">Código del Seguro <span class="text-danger">*</span>
                                     </label>
-                                    <div *ngIf="seguroClienteResponse.get('seguro.codigo')?.invalid && seguroClienteResponse.get('seguro.codigo')?.touched"
+                                    <div *ngIf="seguro.get('codigo')?.invalid && seguro.get('codigo')?.touched"
                                         class="text-danger">
-                                        <div *ngIf="seguroClienteResponse.get('seguro.codigo')?.errors?.['required']">
+                                        <div *ngIf="seguro.get('codigo')?.errors?.['required']">
                                             El código es requerido.
                                         </div>
-                                        <div *ngIf="seguroClienteResponse.get('seguro.codigo')?.errors?.['minlength']">
+                                        <div *ngIf="seguro.get('codigo')?.errors?.['minlength']">
                                             Mínimo 3 caracteres.
                                         </div>
-                                        <div *ngIf="seguroClienteResponse.get('seguro.codigo')?.errors?.['maxlength']">
+                                        <div *ngIf="seguro.get('codigo')?.errors?.['maxlength']">
                                             Máximo 10 caracteres.
                                         </div>
                                     </div>
@@ -67,12 +65,12 @@
                                     <input id="nombreSeguro" formControlName="nombre" class="form-control" type="text">
                                     <label for="nombreSeguro">Nombre del Seguro <span class="text-danger">*</span>
                                     </label>
-                                    <div *ngIf="seguroClienteResponse.get('seguro.nombre')?.invalid && seguroClienteResponse.get('seguro.nombre')?.touched"
+                                    <div *ngIf="seguro.get('nombre')?.invalid && seguro.get('nombre')?.touched"
                                         class="text-danger">
-                                        <div *ngIf="seguroClienteResponse.get('seguro.nombre')?.errors?.['required']">
+                                        <div *ngIf="seguro.get('nombre')?.errors?.['required']">
                                             El nombre es requerido.
                                         </div>
-                                        <div *ngIf="seguroClienteResponse.get('seguro.nombre')?.errors?.['minlength']">
+                                        <div *ngIf="seguro.get('nombre')?.errors?.['minlength']">
                                             Mínimo 3 caracteres.
                                         </div>
                                     </div>
@@ -85,12 +83,12 @@
                                     <input id="sumaSeguro" formControlName="suma" class="form-control" type="number">
                                     <label for="sumaSeguro">Suma Asegurada <span class="text-danger">*</span>
                                     </label>
-                                    <div *ngIf="seguroClienteResponse.get('seguro.suma')?.invalid && seguroClienteResponse.get('seguro.suma')?.touched"
+                                    <div *ngIf="seguro.get('suma')?.invalid && seguro.get('suma')?.touched"
                                         class="text-danger">
-                                        <div *ngIf="seguroClienteResponse.get('seguro.suma')?.errors?.['required']">
+                                        <div *ngIf="seguro.get('suma')?.errors?.['required']">
                                             La suma asegurada es requerido.
                                         </div>
-                                        <div *ngIf="seguroClienteResponse.get('seguro.suma')?.errors?.['min']">
+                                        <div *ngIf="seguro.get('suma')?.errors?.['min']">
                                             Mínimo 1.
                                         </div>
                                     </div>
@@ -102,12 +100,12 @@
                                     <input id="primaSeguro" formControlName="prima" class="form-control" type="number">
                                     <label for="primaSeguro">Prima <span class="text-danger">*</span>
                                     </label>
-                                    <div *ngIf="seguroClienteResponse.get('seguro.prima')?.invalid && seguroClienteResponse.get('seguro.prima')?.touched"
+                                    <div *ngIf="seguro.get('prima')?.invalid && seguro.get('prima')?.touched"
                                         class="text-danger">
-                                        <div *ngIf="seguroClienteResponse.get('seguro.prima')?.errors?.['required']">
-                                            La prima es requerido.
+                                        <div *ngIf="seguro.get('prima')?.errors?.['required']">
+                                            La prima del seguro es requerido.
                                         </div>
-                                        <div *ngIf="seguroClienteResponse.get('seguro.prima')?.errors?.['min']">
+                                        <div *ngIf="seguro.get('prima')?.errors?.['min']">
                                             Mínimo 1.
                                         </div>
                                     </div>
@@ -126,7 +124,7 @@
                             <i class="bi bi-x-circle"></i> Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save"></i> Actualizar Seguro
+                            <i class="bi bi-save"></i> Asignar Seguro
                         </button>
                     </div>
 

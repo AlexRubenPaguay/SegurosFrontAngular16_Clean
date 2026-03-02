@@ -7,6 +7,7 @@ import { NuevoComponent } from '../components/nuevo/nuevo.component';
 import { ActualizarComponent } from '../components/actualizar/actualizar.component';
 import { DetallesComponent } from '../components/detalles/detalles.component';
 import { EliminarComponent } from '../components/eliminar/eliminar.component';
+import { SegurosModule } from "../../seguros/seguros-module/seguros.module";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { EliminarComponent } from '../components/eliminar/eliminar.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SegurosModule
   ]
 })
 export class ClientesModule { }

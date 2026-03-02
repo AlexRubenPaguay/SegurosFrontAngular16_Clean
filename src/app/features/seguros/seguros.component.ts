@@ -58,7 +58,7 @@ export class SegurosComponent implements OnInit {
       // this.GetAllClientes();
     }
   }
-  
+
   EliminarSeguro(idSeguro: number) {
     this.serviceSeguro.EliminarSeguro(idSeguro);
   }

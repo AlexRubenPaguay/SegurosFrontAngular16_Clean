@@ -17,7 +17,7 @@ export class NuevoComponent implements OnInit {
   }
   titulo = 'Nuevo Cliente';
   modal: boolean = false;
-  listaClientes=this.serviceCliente.listaClientes$;
+  listaClientes = this.serviceCliente.listaClientes$;
 
   cliente = new FormGroup({
     idCliente: new FormControl(0),
@@ -40,7 +40,7 @@ export class NuevoComponent implements OnInit {
       return;
     }
     const _cliente: Cliente = {
-      idCliente:0,
+      idCliente: 0,
       cedula: this.cliente.value.cedula || '',
       nombre: this.cliente.value.nombre || '',
       telefono: this.cliente.value.telefono || '',
