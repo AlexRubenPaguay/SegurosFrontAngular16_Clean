@@ -14,12 +14,11 @@ import { ClientesModule } from './features/clientes/clientes-module/clientes.mod
 //MODULOS DE SEGUROS
 import { SegurosModule } from './features/seguros/seguros-module/seguros.module';
 
-
 @NgModule({
   declarations: [
-    AppComponent,    
+    AppComponent,
     UsuariosComponent,
-    MenuComponent,    
+    MenuComponent,
   ],
   imports: [
     BrowserModule,

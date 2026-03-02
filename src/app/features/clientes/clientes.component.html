@@ -1,6 +1,6 @@
 <div class="container">
     <h3 class="text text-center">Administración de Clientes</h3>
-    <div class="row mb-3 mt-3">
+    <div class="row mb-3 mt-3 px-5">
         <div class="col col-2">
             <app-nuevo></app-nuevo>
         </div>
@@ -22,8 +22,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let cli of clientes">
-                <td><button (click)="(null)" class="btn btn-outline-primary pt-1 pb-1 m-1">
-                        <i class="bi bi-shield"></i> Asignar Seguro</button></td>
+                <td>
+                    <app-nuevo-seguro (click)="ObtenerCliente(cli)"></app-nuevo-seguro>
+                </td>
                 <td>{{cli.cedula}}</td>
                 <td>{{cli.nombre}}</td>
                 <td>{{cli.telefono}}</td>
@@ -33,7 +34,8 @@
                         <app-actualizar (click)="ObtenerCliente(cli)" title="Actualizar"></app-actualizar>
                         <app-detalles (click)="ObtenerCliente(cli)" title="Ver Detalles">
                         </app-detalles>
-                        <button (click)="Confirmar(cli.cedula)" class="btn btn-outline-danger pt-1 pb-1 m-1" title="Eliminar">
+                        <button (click)="Confirmar(cli.cedula)" class="btn btn-outline-danger pt-1 pb-1 m-1"
+                            title="Eliminar">
                             <i class="bi bi-trash"></i>Eliminar</button>
                     </div>
                 </td>
